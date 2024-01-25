@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  h2 Data from the server:
+  
+  each data in localData
+    each value, key in data
+      if key !== 'id'
+        p #{key}: #{value}
