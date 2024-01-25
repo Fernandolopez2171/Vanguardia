@@ -3,9 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  h2 Data from the server:
   
-  each data in localData
-    each value, key in data
-      if key !== 'id'
-        p #{key}: #{value}
+  h2 Data from the server:
+  .data-container
+    each data in localData
+      .individual-data
+        each value, key in data
+            p #{key}: #{value}

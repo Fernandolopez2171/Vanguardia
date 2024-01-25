@@ -4,5 +4,21 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+.data-container {
+  font: 14px;
+  font-weight: bold;
+}
+
+.individual-data {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  float: left;
+  width: 200px;
+  height: 100px;
+  margin-right: 20px;
 }

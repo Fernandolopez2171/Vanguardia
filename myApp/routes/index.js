@@ -1,11 +1,12 @@
 var express = require("express");
 var router = express.Router();
 var axios = require("axios");
+const localData = require("../Utils/data.js");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
   try {
-    const response = await axios.get("http://localhost:3000/my-local-data");
+    const response = await axios.get("http://localhost:3000/data");
     res.render("index", {
       title: "My Branch ",
       localData: response.data,
@@ -16,15 +17,7 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-router.get("/my-local-data", (req, res) => {
-  const localData = [
-    {
-      id: 1,
-      name: "Khristopher Lopez",
-      age: 24,
-    },
-  ];
-
+router.get("/data", (req, res) => {
   res.json(localData);
 });
 
