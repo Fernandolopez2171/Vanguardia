@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const Schema = mongoose.Schema;
 const BookSchema = new mongoose.Schema({
   id: Number,
   name: String,
@@ -17,9 +17,9 @@ const shelfSchema = new mongoose.Schema({
   id: Number,
   position: String,
   category: String,
-  books: [BookSchema],
+  booksID: [{ type: Number, ref: "books" }],
 });
 
-const book = mongoose.model("book", BookSchema);
-const shelf = mongoose.model("shelf", shelfSchema);
+const book = mongoose.model("books", BookSchema);
+const shelf = mongoose.model("shelfs", shelfSchema);
 module.exports = { book, shelf };
