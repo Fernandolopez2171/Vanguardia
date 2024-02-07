@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const BookSchema = new mongoose.Schema({
-  id: Number,
+  id: { type: Number, unique: true, required: true },
   name: String,
   author: String,
   num_pages: Number,
@@ -14,7 +14,7 @@ const BookSchema = new mongoose.Schema({
 });
 
 const shelfSchema = new mongoose.Schema({
-  id: Number,
+  id: { type: Number, unique: true, required: true },
   position: String,
   category: String,
   booksID: [{ type: Number, ref: "books" }],
