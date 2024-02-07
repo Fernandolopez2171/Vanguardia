@@ -15,13 +15,9 @@ async function shelfGetAll(req, res) {
     const shelfs = await shelfModel.shelf.find();
     await Promise.all(
       shelfs.map(async (shelf) => {
-        const books = await Promise.all(
-          shelf.booksID.map(async (bookID) => {
-            const book = await shelfModel.book.findOne({ id: bookID });
-            return book;
-          })
-        );
-
+        const books = await shelfModel.book.find({
+          id: { $in: shelf.booksID },
+        });
         shelf.booksID = books;
       })
     );
@@ -41,13 +37,9 @@ async function shelfGetOne(req, res) {
     const shelfID = req.params.id;
     const shelf = await shelfModel.shelf.findOne({ id: shelfID });
     if (shelf) {
-      const books = await Promise.all(
-        shelf.booksID.map(async (bookID) => {
-          const book = await shelfModel.book.findOne({ id: bookID });
-          return book;
-        })
-      );
-
+      const books = await shelfModel.book.find({
+        id: { $in: shelf.booksID },
+      });
       shelf.booksID = books;
     }
     res.send({
@@ -60,8 +52,42 @@ async function shelfGetOne(req, res) {
   }
 }
 
+async function shelfUpdate(req, res) {
+  const shelfID = req.params.id;
+  const shelf = await shelfModel.shelf.findOne({ id: shelfID });
+  if (shelf) {
+    try {
+      await shelfModel.shelf.updateOne({ id: shelfID }, req.body);
+      res.send({ message: "Shelf updated successfully", status: "200" });
+    } catch (err) {
+      res.status(500).send({ message: "Internal server error", status: "500" });
+    }
+  } else {
+    res.status(404).send({ message: "Shelf not found", status: "404" });
+  }
+}
+
+async function shelfDelete(req, res) {
+  const shelfID = req.params.id;
+  const shelf = await shelfModel.shelf.findOne({
+    id: shelfID,
+  });
+  if (shelf) {
+    try {
+      await shelfModel.shelf.deleteOne({ id: shelfID });
+      res.send({ message: "Shelf deleted successfully", status: "200" });
+    } catch (err) {
+      res.status(500).send({ message: "Internal server error", status: "500" });
+    }
+  } else {
+    res.status(404).send({ message: "Shelf not found", status: "404" });
+  }
+}
+
 module.exports = {
   shelfCreate,
   shelfGetAll,
   shelfGetOne,
+  shelfUpdate,
+  shelfDelete,
 };

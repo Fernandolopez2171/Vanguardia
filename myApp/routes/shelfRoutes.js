@@ -9,4 +9,10 @@ router.post("/create", shelfController.shelfCreate);
 router.get("/getAll", shelfController.shelfGetAll);
 router.get("/getOne/:id", shelfController.shelfGetOne);
 
+//PUT
+router.put("/update/:id", shelfController.shelfUpdate);
+
+//DELETE
+router.delete("/delete/:id", shelfController.shelfDelete);
+
 module.exports = router;
