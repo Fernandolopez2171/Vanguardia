@@ -6,8 +6,7 @@ const booksController = require("../Controllers/booksController");
 //POST
 router.post("/create", booksController.booksCreate);
 //GET
-router.get("/getAll", booksController.booksGetAll);
-router.get("/getOne/:id", booksController.booksGetOne);
+router.get("/getBooks/:id?", booksController.booksGet);
 //DELETE
 router.delete("/delete/:id", booksController.deleteBook);
 //PUT

@@ -4,15 +4,17 @@ const shelfController = require("../Controllers/shelfController");
 
 //POST
 router.post("/create", shelfController.shelfCreate);
+router.post("/addBook/:id", shelfController.shelfAddBook);
 
 //GET
-router.get("/getAll", shelfController.shelfGetAll);
-router.get("/getOne/:id", shelfController.shelfGetOne);
+router.get("/getShelf/:id?", shelfController.shelfGet);
 
 //PUT
 router.put("/update/:id", shelfController.shelfUpdate);
 
 //DELETE
 router.delete("/delete/:id", shelfController.shelfDelete);
+
+
 
 module.exports = router;

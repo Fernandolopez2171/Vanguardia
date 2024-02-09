@@ -8,6 +8,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var booksRouter = require("./routes/booksRoutes");
 var shelfRouter = require("./routes/shelfRoutes");
+var copyRouter = require("./routes/copyRoutes");
 const connectDB = require("./config/db");
 
 var app = express();
@@ -28,6 +29,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/books", booksRouter);
 app.use("/shelf", shelfRouter);
+app.use("/copy", copyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -6,31 +6,34 @@ async function booksCreate(req, res) {
     await newBook.save();
     res.send({ message: "Book created successfully", status: "200" });
   } catch (err) {
+    console.log(err);
     res.status(500).send({ message: "Internal server error", status: "500" });
   }
 }
 
-async function booksGetAll(req, res) {
-  try {
-    const books = await booksModel.book.find();
-    res.send({
-      message: "Data obtained successfully",
-      status: "200",
-      data: books,
-    });
-  } catch (err) {
-    res.status(500).send({ message: "Internal server error", status: "500" });
-  }
-}
-
-async function booksGetOne(req, res) {
+async function booksGet(req, res) {
   try {
     const bookID = req.params.id;
-    const book = await booksModel.book.findOne({ id: bookID });
+    let data;
+
+    if (bookID) {
+      // Get one book
+      const book = await booksModel.book.findOne({ id: bookID });
+      if (!book) {
+        return res
+          .status(404)
+          .send({ message: "Book not found", status: "404" });
+      }
+      data = book;
+    } else {
+      // Get all books
+      data = await booksModel.book.find();
+    }
+
     res.send({
       message: "Data obtained successfully",
       status: "200",
-      data: book,
+      data: data,
     });
   } catch (err) {
     res.status(500).send({ message: "Internal server error", status: "500" });
@@ -51,7 +54,14 @@ async function deleteBook(req, res) {
 async function updateBook(req, res) {
   try {
     const bookID = req.params.id;
-    await booksModel.book.updateOne({ id: bookID }, req.body);
+    const updatedBook = await booksModel.book.findOneAndUpdate(
+      { id: bookID },
+      req.body,
+      { new: true }
+    );
+    if (!updatedBook) {
+      return res.status(404).send({ message: "Book not found", status: "404" });
+    }
     res.send({ message: "Book updated successfully", status: "200" });
   } catch (err) {
     res.status(500).send({ message: "Internal server error", status: "500" });
@@ -60,8 +70,7 @@ async function updateBook(req, res) {
 
 module.exports = {
   booksCreate,
-  booksGetAll,
   deleteBook,
   updateBook,
-  booksGetOne,
+  booksGet,
 };
