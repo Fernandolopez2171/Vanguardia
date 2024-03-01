@@ -1,4 +1,5 @@
 const Model = require("../model/bookModel");
+const mongoose = require("mongoose");
 
 async function copyCreate(req, res) {
   const { bookId, numCopies } = req.body;
@@ -8,9 +9,9 @@ async function copyCreate(req, res) {
     if (!book) {
       return res.status(404).send({ message: "Book not found", status: "404" });
     }
-    let copy = await Model.CopyModel.findOne({ originalBookId: bookId });
+    let copy = await Model.CopyModel.findOne({ "originalBook.id": bookId });
     if (!copy) {
-      copy = new Model.CopyModel({ originalBookId: bookId });
+      copy = new Model.CopyModel({ originalBook: book });
     }
     for (let i = 0; i < numCopies; i++) {
       copy.copies.push({ inShelf: false });
@@ -32,8 +33,8 @@ async function copyGet(req, res) {
     if (originalBookId) {
       // Get one copy
       const copy = await Model.CopyModel.findOne({
-        originalBookId: originalBookId,
-      });
+        originalBook: originalBookId,
+      }).populate("originalBook");
       if (!copy) {
         return res
           .status(404)
@@ -42,7 +43,7 @@ async function copyGet(req, res) {
       data = copy;
     } else {
       // Get all copies
-      data = await Model.CopyModel.find();
+      data = await Model.CopyModel.find().populate("originalBook");
     }
 
     res.send({
@@ -60,7 +61,7 @@ async function deleteCopy(req, res) {
   try {
     const originalBookId = req.params.id;
     const copy = await Model.CopyModel.findOneAndDelete({
-      originalBookId: originalBookId,
+      originalBook: originalBookId,
     });
     if (!copy) {
       return res.status(404).send({ message: "Copy not found", status: "404" });
@@ -77,7 +78,7 @@ async function updateCopy(req, res) {
     const originalBookId = req.params.id;
     const copiesToUpdate = req.body;
     let updatedCopy = await Model.CopyModel.findOne({
-      originalBookId: originalBookId,
+      originalBook: originalBookId,
     });
 
     if (!updatedCopy) {

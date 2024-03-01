@@ -14,13 +14,13 @@ const BookSchema = new mongoose.Schema({
   edition: { type: String, require: true },
 });
 
-const CopySchema = new Schema({
-  originalBookId: { type: Number, ref: "Book" },
+const CopySchema = new mongoose.Schema({
+  originalBook: { type: BookSchema, required: true },
   copies: [
     {
       _id: false,
       copyId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: function () {
           return new mongoose.Types.ObjectId();
         },
